@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Midi Visualization</title>
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <script type="text/javascript" src="js/third-party/d3.v4.js"></script>
+  <script src="js/third-party/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="js/third-party/MidiConvert.js"></script>
+  <script type="text/javascript" src="js/third-party/Tone.js"></script>
+  <script src="js/third-party/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/Song.js"></script>
+  <script type="text/javascript" src="js/FreqChart.js"></script>
+  <script type="text/javascript" src="js/RhythmChart.js"></script>
+  <script type="text/javascript" src="js/ScrollChart.js"></script>
+{{!--   TODO: I should really bundle all this... --}}
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">song visualizations
+                    <small>using midi files</small>
+                </h1>
+            </div>
+        </div><!-- /.row -->
+
+        {{{body}}}
+
+        <hr>
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>|</p>
+                </div>
+            </div><!-- /.row -->
+        </footer>
+
+    </div>
+</body>
+</html>

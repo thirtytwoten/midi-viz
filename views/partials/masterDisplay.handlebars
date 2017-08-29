@@ -1,0 +1,85 @@
+<div id="masterDisplay" data={{{song.songPath}}}>
+<div class="row">
+  <div class="col-md-6">
+      <div class="row songMeta">
+        <h3 class="songName">[No name]</h3>
+        <button>play</button>
+        <h4 class="songStats">Duration: | BPM: | TimeSignature: </h4>
+      </div>
+      <div class="freqChart"></div>
+  </div>
+  <div class="col-md-6">
+      <div class="rhythmChart"></div>
+  </div>
+</div><!-- /.row -->
+
+<div class="row">
+
+  <div class="col-lg-12">
+      <div class="scrollChart"></div>
+  </div>
+
+</div><!-- /.row -->
+
+<script>
+  let song, freqChart, rhythmChart, scrollChart;
+  let songPath = d3.select('#masterDisplay').attr('data');
+
+  song = new Song(songPath);
+  song.parse().then(function(s){
+    updateSongMeta(s.midiData);
+    freqChart = new FreqChart(s, "#masterDisplay .freqChart");
+    freqChart.plot();
+    rhythmChart = new RhythmChart(s, '#masterDisplay .rhythmChart');
+    rhythmChart.plot();
+    scrollChart = new ScrollChart(s, '#masterDisplay .scrollChart', [freqChart,rhythmChart]);
+    scrollChart.plot();
+    prepAudio(s);
+  })//.catch(function(err){ console.log(err.message) });
+
+  function updateSongMeta(midiData){
+    if (midiData.header.name) {
+      d3.select('.songName').text(midiData.header.name);
+    }
+    d3.select('.songStats').text(`Duration: ${parseFloat(midiData.duration).toFixed(2)} | BPM: ${midiData.header.bpm} | TimeSignature: ${midiData.header.timeSignature[0]}/${midiData.header.timeSignature[0]}`);
+  }
+
+  function prepAudio(song){
+    Tone.Transport.bpm.value = song.bpMinute;
+    Tone.Transport.timeSignature = song.midiData.header.timeSignature;
+
+    synth = new Tone.PolySynth(8, Tone.Synth, {
+      "oscillator": {
+        "type": "sine3"
+      },
+      "envelope": {
+        "attack": 0.03,
+        "decay": 0.1,
+        "sustain": 0.2,
+        "release": 0.6
+      }
+    }).toMaster();
+
+    let songPlay = new Tone.Part(playNote, song.midiNotes).start(0);
+
+    let button = document.querySelector("#masterDisplay button");
+    button.addEventListener("click", function(){
+      if (Tone.Transport.state === "started"){
+        Tone.Transport.stop();
+        button.textContent = "play";
+      } else {
+        Tone.Transport.start("+0.1", 0);
+        button.textContent = "STOP";
+      }
+    });
+    button.classList.add("active");
+  }
+
+  function playNote(time, event){
+    synth.triggerAttackRelease(event.name, event.duration, time, event.velocity);
+    scrollChart.playNote(event);
+    rhythmChart.playNote(event);
+  }
+
+</script>
+</div>

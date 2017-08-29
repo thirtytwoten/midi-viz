@@ -1,0 +1,66 @@
+  <!--manual-->
+  <form>
+    Choose a song:
+    <select id="myList" onchange="chosenSong()">
+      <option>Song1</option>
+      <option>Song2</option>
+      <option>Song3</option>
+      <option>Song4</option>
+      <option>Song5</option>
+    </select>
+    <p>Your chosen song is: <input type="text" id="SongName" size="20"></p>
+  </form>
+
+  <form>
+    Choose another song:
+    <select id="anotherList" onchange="chosenAnother()">
+      <option>Song1</option>
+      <option>Song2</option>
+      <option>Song3</option>
+      <option>Song4</option>
+      <option>Song5</option>
+    </select>
+    <p>Your other song is: <input type="text" id="AnotherName" size="20"></p>
+  </form>
+
+  <!-- data incorporated -->
+  Choose a song (data incorporated method)
+  <select onchange="createButton(this.value)"> </select>
+
+<script>
+  function chosenSong(){
+    var mylist=document.getElementById("MyList");
+    document.getElementById("SongName").value=myList.options[myList.selectedIndex].text;
+  }
+
+  function chosenAnother(){
+    var anotherlist=document.getElementById("anotherList");
+    document.getElementById("AnotherName").value=anotherList.options[anotherList.selectedIndex].text;
+  }
+
+    var dropDown = d3.select('body').select('select')
+
+  function createButton(word) {
+    var w_data = words_data.filter(function(d){
+      return d['word'] == word
+    })
+
+    var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr('id', word)
+
+    if(selectedwords.indexOf(word) > -1) {
+
+    } else {
+      var button = d3.select('body').append('button')
+      .attr('value', word)
+      .attr('onclick', 'wordButton()')
+      .on('click', function(d) {
+        d3.select(this).remove()
+        d3.selectAll("[value="+word+"]").remove()
+      })
+      .html(word)
+
+    selectedwords.push(word)
+
+    console.log(selectedwords)
+    }
+</script>
