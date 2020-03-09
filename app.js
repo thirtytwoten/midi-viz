@@ -3,9 +3,10 @@ let path = require('path'),
     exphbs = require('express-handlebars')
     helpers = require('./lib/helpers');
 
-let app = express(),
-    port = process.env.OPENSHIFT_NODEJS_PORT || process.argv[2] || 3000,
-    hbs = exphbs.create({
+let app = express();
+let port = process.env.OPENSHIFT_NODEJS_PORT || process.argv[2] || 3000;
+let hostname = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || "0.0.0.0";
+let hbs = exphbs.create({
       defaultLayout: 'main',
       helpers: helpers,
       partiailsDir: 'views/partials'
@@ -36,5 +37,5 @@ app.get('/ksp', function (req, res) {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(port);
-console.log(`app listening on port ${port}`);
+app.listen(port, hostname);
+console.log(`app listening on ${hostname}:${port}`);
