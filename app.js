@@ -4,8 +4,8 @@ let path = require('path'),
     helpers = require('./lib/helpers');
 
 let app = express();
-let port = process.env.OPENSHIFT_NODEJS_PORT || process.argv[2] || 3000;
-let hostname = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || "0.0.0.0";
+let port = process.argv[2] || process.env.PORT || 3000;
+let hostname = process.env.IP || "0.0.0.0";
 let hbs = exphbs.create({
       defaultLayout: 'main',
       helpers: helpers,
